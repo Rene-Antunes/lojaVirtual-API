@@ -56,7 +56,22 @@ data_enviado, data_preparacao, forma_pagamento_id, id, celular, codigo, email, e
 endereco_complemento, endereco_estado, endereco_logradouro, endereco_numero, endereco_rua, nome, status_pedido, telefone) values 
 (49.99, 10, 49.99, null, null, utc_timestamp(), null, null, null, 1, 1, "21 34234234", 
 "fc91f248-1de5-41cb-b383-18cf4565953c", "rene@gmail.com", "Chatuba", "26585-061", 
-"Mesquita", "casa 1", "Rio de Janeiro", "casa", "716", "rua Dr.Godoy", "Renê Antunes","CRIADO", "21 34095307");
+"Mesquita", "casa 1", "Rio de Janeiro", "casa", "716", "rua Dr.Godoy", "Renê Antunes","CONFIRMADO", "21 34095307");
+
+insert into pedido (sub_total, valor_frete, valor_total, data_cancelamento, data_confirmacao, data_criacao, data_entrega, 
+data_enviado, data_preparacao, forma_pagamento_id, id, celular, codigo, email, endereco_bairro, endereco_cep, endereco_cidade, 
+endereco_complemento, endereco_estado, endereco_logradouro, endereco_numero, endereco_rua, nome, status_pedido, telefone) values 
+(100.00, 10, 100.00, null, null,"2023-10-03T08:39:36.229432", null, null, null, 1, 2, "21 34234234", 
+"fc91f248-1de5-41cb-b383-18cf4565953c", "rene@gmail.com", "Chatuba", "26585-061", 
+"Mesquita", "casa 1", "Rio de Janeiro", "casa", "716", "rua Dr.Godoy", "Renê Antunes","CONFIRMADO", "21 34095307");
+
+
+insert into pedido (sub_total, valor_frete, valor_total, data_cancelamento, data_confirmacao, data_criacao, data_entrega, 
+data_enviado, data_preparacao, forma_pagamento_id, id, celular, codigo, email, endereco_bairro, endereco_cep, endereco_cidade, 
+endereco_complemento, endereco_estado, endereco_logradouro, endereco_numero, endereco_rua, nome, status_pedido, telefone) values 
+(190.00, 10, 200.00, null,null ,"2023-08-03T08:39:36.229432", null, null, null, 2, 3, "21 34234234", 
+"fc91f248-1de5-41cb-b383-18cf4565953c", "rene@gmail.com", "Chatuba", "26585-061", 
+"Mesquita", "casa 1", "Rio de Janeiro", "casa", "716", "rua Dr.Godoy", "Renê Antunes","CONFIRMADO", "21 34095307");
 
 #Item Pedido
 

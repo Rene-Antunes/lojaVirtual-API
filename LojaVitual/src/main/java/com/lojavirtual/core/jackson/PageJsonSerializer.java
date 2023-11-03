@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-//@JsonComponent
+@JsonComponent
 public class PageJsonSerializer extends JsonSerializer<Page<?>> {
 
 	@Override
@@ -27,6 +27,4 @@ public class PageJsonSerializer extends JsonSerializer<Page<?>> {
 		
 	}
 	
-	//no momento deixar desativado até resolver erro de conversão com MappingJacksonValue
-
 }

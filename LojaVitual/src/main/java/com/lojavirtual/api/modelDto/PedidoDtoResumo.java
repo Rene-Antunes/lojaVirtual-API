@@ -27,9 +27,8 @@ public class PedidoDtoResumo {
 	private StatusPedido statusPedido;
 	private FormaPagamentoDto formaPagamento;
 
-	private ClienteDto cliente;
+	private ClienteDtoResumo cliente;
 
-	private List<ItemPedidoDto> itens = new ArrayList<>();
 	
 	
 }

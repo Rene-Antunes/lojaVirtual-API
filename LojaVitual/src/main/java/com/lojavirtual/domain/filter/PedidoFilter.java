@@ -1,4 +1,4 @@
-package com.lojavirtual.domain.repository.filter;
+package com.lojavirtual.domain.filter;
 
 import java.time.LocalDateTime;
 
@@ -15,11 +15,7 @@ public class PedidoFilter {
 	
 	private String nomeCliente;
 	private Long formaPagamentoId;
-	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private LocalDateTime dataCriacaoInicio;
-	
-	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private LocalDateTime dataCriacaoFim;
-	
 	private StatusPedido status;
 }
