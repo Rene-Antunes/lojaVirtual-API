@@ -1,12 +1,18 @@
 package com.lojavirtual.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -16,10 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lojavirtual.api.assembler.FotoProdutoDtoAssembler;
 import com.lojavirtual.api.modelDto.FotoProdutoDto;
 import com.lojavirtual.api.modelDto.input.FotoProdutoDtoInput;
+import com.lojavirtual.domain.exception.EntidadeNaoEncontradaException;
 import com.lojavirtual.domain.model.FotoProduto;
 import com.lojavirtual.domain.model.Produto;
 import com.lojavirtual.domain.service.CadastroProdutoService;
 import com.lojavirtual.domain.service.CatalogoFotoProdutoService;
+import com.lojavirtual.domain.service.FotoStorageService;
 
 import jakarta.validation.Valid;
 
@@ -36,16 +44,43 @@ public class ProdutoFotoController {
 	@Autowired
 	private FotoProdutoDtoAssembler fotoProdutoDtoAssembler;
 	
+	@Autowired
+	private FotoStorageService fotoStorageService;
 	
 	
-	@GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.IMAGE_PNG_VALUE)
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public FotoProdutoDto buscar (@PathVariable Long produtoId) {
 		
 		FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(produtoId);
 		return fotoProdutoDtoAssembler.toDto(fotoProduto);
 	}
 	
+	@GetMapping(produces = MediaType.ALL_VALUE)
+	public ResponseEntity<InputStreamResource> servirFoto(@PathVariable Long produtoId,
+			@RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException{
+		
+		try {
+			
+			FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(produtoId);
+			MediaType mediaTypeFoto = MediaType.parseMediaType(fotoProduto.getContentType());
+			List<MediaType> mediaTypesAceitas = MediaType.parseMediaTypes(acceptHeader);
+			verificarCompatibilidadeMediaType(mediaTypeFoto, mediaTypesAceitas);
+		
+			
+			InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+			
+			return ResponseEntity.ok()
+					.contentType(mediaTypeFoto)
+					.body(new InputStreamResource(inputStream));
+		
+		} catch (EntidadeNaoEncontradaException e) {
+			
+			return ResponseEntity.notFound().build();
+		}
+		
+	}
 	
+
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoDto atualizarFoto(@PathVariable Long produtoId,
 			@Valid FotoProdutoDtoInput fotoProdutoDtoInput,
@@ -66,4 +101,16 @@ public class ProdutoFotoController {
 		return fotoProdutoDtoAssembler.toDto(fotoSalva);
 	}
 	
+	
+	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto,
+			List<MediaType> mediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
+
+		boolean compativel = mediaTypesAceitas.stream()
+				.anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
+		
+		if(!compativel) {
+			throw new HttpMediaTypeNotAcceptableException(mediaTypesAceitas);
+		}
+		
+	}
 }

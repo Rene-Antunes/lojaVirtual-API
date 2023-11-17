@@ -10,6 +10,7 @@ delete from usuario_grupos;
 delete from item_pedido;
 delete from grupo_permissoes;
 delete from forma_pagamento;
+delete from foto_produto;
 
 set foreign_key_checks = 1;
 

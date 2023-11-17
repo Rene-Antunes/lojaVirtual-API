@@ -19,7 +19,7 @@ public class FotoProduto {
 	@Column(name = "produto_id")
 	@Id
 	@EqualsAndHashCode.Include
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@OneToOne(fetch = FetchType.LAZY) // possível mudança para mais de uma foto

@@ -35,7 +35,7 @@ public class CatalogoFotoProdutoService {
 		if(fotoExistente.isPresent()) {
 			nomeArquivoExistente = fotoExistente.get().getNomeArquivo();
 			produtoRepository.delete(fotoProduto);
-			
+			excluir(produtoId);
 		}
 		
 		fotoProduto.setNomeArquivo(nomeNovoArquivo);

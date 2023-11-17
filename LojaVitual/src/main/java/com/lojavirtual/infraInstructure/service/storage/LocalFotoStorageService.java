@@ -1,5 +1,6 @@
 package com.lojavirtual.infraInstructure.service.storage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,14 +33,26 @@ public class LocalFotoStorageService implements FotoStorageService {
 
 	@Override
 	public void remover(String nomeArquivo) {
-		// TODO Auto-generated method stub
-		
+		Path arquivoPath = getArquivoPath(nomeArquivo);
+		try {
+			Files.deleteIfExists(arquivoPath);
+			
+		} catch (Exception e) {
+			throw new StorageException("Não foi poível excluir arquivo", e);
+		}
 	}
 
 	@Override
-	public InputStream recuperar(String nomeArquivo) {
-		// TODO Auto-generated method stub
-		return null;
+	public InputStream recuperar(String nomeArquivo){
+		
+		try {
+			Path arquivoPath = getArquivoPath(nomeArquivo);
+			return Files.newInputStream(arquivoPath);
+		} catch (Exception e) {
+			throw new StorageException("não foi possivel recuparar arquivo", e);
+		}
+		
+		
 	}
 	
 	private Path getArquivoPath(String nomeArquivo) {
