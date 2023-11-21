@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lojavirtual.domain.exception.FotoProdutoNaoEncontradaException;
 import com.lojavirtual.domain.model.FotoProduto;
 import com.lojavirtual.domain.repository.ProdutoRepository;
 import com.lojavirtual.domain.service.FotoStorageService.NovaFoto;
@@ -65,7 +66,6 @@ public class CatalogoFotoProdutoService {
 	
 	public FotoProduto buscarOuFalhar(Long produtoId) {
 		return produtoRepository.findFotoById(produtoId)
-				.orElseThrow(() -> new RuntimeException("Foto de produto não encontrada"));
+				.orElseThrow(() -> new FotoProdutoNaoEncontradaException(produtoId));
 	}
-	
 }
