@@ -3,6 +3,7 @@ package com.lojavirtual.core.storage;
 import java.nio.file.Path;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import com.amazonaws.regions.Regions;
 
@@ -11,6 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Component
 @ConfigurationProperties("lojavirtual.storage")
 public class StorageProperties {
 	private Local local = new Local();
