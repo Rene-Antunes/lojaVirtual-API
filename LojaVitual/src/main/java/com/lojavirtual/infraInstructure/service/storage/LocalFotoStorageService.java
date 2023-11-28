@@ -1,20 +1,39 @@
 package com.lojavirtual.infraInstructure.service.storage;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import com.lojavirtual.core.storage.StorageProperties;
 import com.lojavirtual.domain.service.FotoStorageService;
 
 @Service
 public class LocalFotoStorageService implements FotoStorageService {
 	
-	@Value("${LojaVirtual.storage.local.diretorio-fotos}")
-	private Path diretorioFotos;
+	@Autowired
+	private StorageProperties storageProperties;
+
+	@Override
+	public FotoRecuperada recuperar(String nomeArquivo){
+		
+		try {
+			Path arquivoPath = getArquivoPath(nomeArquivo);
+			
+			
+			FotoRecuperada fotoRecuperada = FotoRecuperada.builder()
+					.inputStream(Files.newInputStream(arquivoPath))
+					.build();
+			
+			return fotoRecuperada;
+			
+		} catch (Exception e) {
+			throw new StorageException("não foi possivel recuparar arquivo", e);
+		}
+		
+	}
 	
 	@Override
 	public void armazenar(NovaFoto novaFoto) {
@@ -41,21 +60,10 @@ public class LocalFotoStorageService implements FotoStorageService {
 		}
 	}
 
-	@Override
-	public InputStream recuperar(String nomeArquivo){
-		
-		try {
-			Path arquivoPath = getArquivoPath(nomeArquivo);
-			return Files.newInputStream(arquivoPath);
-		} catch (Exception e) {
-			throw new StorageException("não foi possivel recuparar arquivo", e);
-		}
-		
-		
-	}
 	
 	private Path getArquivoPath(String nomeArquivo) {
-		return diretorioFotos.resolve(Path.of(nomeArquivo));
+		return storageProperties.getLocal().getDiretorioFotos()
+				.resolve(Path.of(nomeArquivo));
 	}
 	
 }
