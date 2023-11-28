@@ -15,6 +15,7 @@ import lombok.Setter;
 public class StorageProperties {
 	private Local local = new Local();
 	private S3 s3 = new S3();
+	private TipoStorage tipo = TipoStorage.LOCAL;
 	
 	
 	public enum TipoStorage{
@@ -32,10 +33,12 @@ public class StorageProperties {
 	@Setter
 	public class S3{
 		private String idChaveAcesso;
-		private String chaveAcesso;
+		private String chaveAcessoSecreta;
 		private String bucket;
 		private Regions regiao;
 		private String diretorioFotos;
 	}
+	
+	
 	
 }
