@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 
 public interface FotoStorageService {
@@ -12,7 +13,7 @@ public interface FotoStorageService {
 	void armazenar(NovaFoto novaFoto);
 	void remover(String nomeArquivo);
 	
-	InputStream recuperar(String nomeArquivo);
+	FotoRecuperada recuperar(String nomeArquivo);
 	
 	
 	default String gerarNomeArquivo(String nomeOriginal) {
@@ -33,6 +34,23 @@ public interface FotoStorageService {
 	class NovaFoto{
 		
 		private String nomeArquivo;
+		private String contentType;
 		private InputStream inputStream;
+	}
+	
+	@Getter
+	@Builder
+	public class FotoRecuperada{
+		private InputStream inputStream;
+		private String url;
+		
+		public boolean temUrl() {
+			return url != null;
+		}
+		
+		public boolean temInputStream() {
+			return inputStream != null;
+		}
+		
 	}
 }
