@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.lojavirtual.domain.model.Pedido;
 import com.lojavirtual.domain.repository.PedidoRepository;
+import com.lojavirtual.domain.service.EnvioEmailService.Mensagem;
 
 import jakarta.transaction.Transactional;
 
@@ -18,11 +19,22 @@ public class FluxoPedidoService {
 	@Autowired
 	private PedidoRepository repository;
 	
+	@Autowired
+	private EnvioEmailService emEnvioEmailService;
+	
 	
 	@Transactional
 	public void  confirmar(String codigoPedido) {
 		Pedido pedido = service.buscarOuFalhar(codigoPedido);
 		pedido.confirmar();
+		
+		var mensagem = Mensagem.builder()
+				.assunto("Loja Virtual - Pedido Confirmado")
+				.corpo("O pedido de código: <strong> " + pedido.getCodigo() + 
+						"<strong> foi confirmado!")
+				.destinatario(pedido.getCliente().getEmail())
+				.build();
+		emEnvioEmailService.enviar(mensagem);
 		
 		repository.save(pedido);
 	}
