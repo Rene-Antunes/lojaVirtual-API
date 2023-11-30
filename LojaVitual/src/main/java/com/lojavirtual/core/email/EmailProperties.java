@@ -26,7 +26,7 @@ public class EmailProperties {
 	
 	@Getter
 	@Setter
-	class SandBox{
+	public class SandBox{
 		private String destinatario;
 	}
 }

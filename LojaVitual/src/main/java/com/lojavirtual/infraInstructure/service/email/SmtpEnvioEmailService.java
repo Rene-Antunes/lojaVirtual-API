@@ -11,6 +11,7 @@ import com.lojavirtual.domain.service.EnvioEmailService;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 public class SmtpEnvioEmailService implements EnvioEmailService{
@@ -27,7 +28,20 @@ public class SmtpEnvioEmailService implements EnvioEmailService{
 	@Override
 	public void enviar(Mensagem mensagem) {
 		try {
-			String corpo = processarTemplate(mensagem);
+			
+		MimeMessage mimeMessage = criarMimeMessage(mensagem);
+		mailsander.send(mimeMessage);
+		
+		}catch (Exception e) {
+			throw new EmailException("Email não pode ser enviado", e);
+		}
+	}
+
+
+	protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
+		
+		String corpo = processarTemplate(mensagem);
+		
 		MimeMessage mimeMessage = mailsander.createMimeMessage();
 		
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
@@ -36,11 +50,8 @@ public class SmtpEnvioEmailService implements EnvioEmailService{
 		helper.setSubject(mensagem.getAssunto());
 		helper.setText(corpo, true);
 		
-		mailsander.send(mimeMessage);
+		return mimeMessage;
 		
-		}catch (Exception e) {
-			throw new EmailException("Email não pode ser enviado", e);
-		}
 	}
 	
 	

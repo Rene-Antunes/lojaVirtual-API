@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.lojavirtual.domain.service.EnvioEmailService;
 import com.lojavirtual.infraInstructure.service.email.FakeEnvioEmailService;
+import com.lojavirtual.infraInstructure.service.email.SandBoxEnvioEmailService;
 import com.lojavirtual.infraInstructure.service.email.SmtpEnvioEmailService;
 
 @Configuration
@@ -23,7 +24,9 @@ public class EmailConfig {
 				
 			case SMTP:
 				return new SmtpEnvioEmailService();
-		
+				
+			case SANDBOX:
+				return new SandBoxEnvioEmailService();
 			default:
 				return null;
 			
