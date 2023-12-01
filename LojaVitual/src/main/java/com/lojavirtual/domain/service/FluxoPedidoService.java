@@ -11,31 +11,18 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class FluxoPedidoService {
-	
-	
+
 	@Autowired
 	private EmissaoPedidoService service;
 	
 	@Autowired
 	private PedidoRepository repository;
 	
-	@Autowired
-	private EnvioEmailService emEnvioEmailService;
-	
 	
 	@Transactional
 	public void  confirmar(String codigoPedido) {
 		Pedido pedido = service.buscarOuFalhar(codigoPedido);
 		pedido.confirmar();
-		
-		var mensagem = Mensagem.builder()
-				.assunto("Loja Virtual - Pedido Confirmado")
-				.corpo("pedido-confirmado.html")
-				.variavel("pedido", pedido)
-				.destinatario(pedido.getCliente().getEmail())
-				.build();
-		emEnvioEmailService.enviar(mensagem);
-		
 		repository.save(pedido);
 	}
 	

@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.lojavirtual.domain.event.PedidoConfirmadoEvent;
 import com.lojavirtual.domain.exception.NegocioException;
 
 import jakarta.persistence.CascadeType;
@@ -24,14 +26,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Pedido {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper=false)
+public class Pedido extends AbstractAggregateRoot<Pedido>{
 	
 	@Id
 	@EqualsAndHashCode.Include
@@ -83,7 +84,7 @@ public class Pedido {
 		setStatus(StatusPedido.CONFIRMADO);
 		setDataConfirmacao(LocalDateTime.now());
 		
-		//TODO implementar event
+		registerEvent(new PedidoConfirmadoEvent(this));
 	}
 	
 	public void prepararPedido() {
