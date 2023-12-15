@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,19 +40,19 @@ public class FormaPagamentoController {
 	@Autowired
 	private FormaPagamentoInputDisassembler disassembler;
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<FormaPagamentoDto> listar(){
 		List<FormaPagamento> formasPagamento = repository.findAll();
 		return assembler.toCollectionDto(formasPagamento);
 	}
 	
-	@GetMapping("/{formaPagamentoId}")
+	@GetMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public FormaPagamentoDto buscar(@PathVariable Long formaPagamentoId) {
 		FormaPagamento formaPagamento = service.buscarOuFalhar(formaPagamentoId);
 		return assembler.toDto(formaPagamento);
 	}
 	
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public FormaPagamentoDto adicionar(@RequestBody @Valid FormaPagamentoDtoInput formaPagamentoInput) {
 		

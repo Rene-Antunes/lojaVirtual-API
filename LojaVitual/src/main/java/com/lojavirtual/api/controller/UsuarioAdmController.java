@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,13 +43,13 @@ public class UsuarioAdmController {
 	@Autowired
 	private CadastroUsuarioService service;
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<UsuarioDto> listar(){
 		List<Usuario> usuarios = repository.findAll();
 		return assembler.toDtoCollection(usuarios);
 	}
 	
-	@GetMapping("/{usuarioId}")
+	@GetMapping(value ="/{usuarioId}",produces = MediaType.APPLICATION_JSON_VALUE)
 	public UsuarioDto buscar(@PathVariable Long usuarioId) {
 		Usuario usuario =	service.buscarOuFalhar(usuarioId);
 		
@@ -56,8 +57,8 @@ public class UsuarioAdmController {
 	
 	}
 	
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(value =  HttpStatus.CREATED)
 	public UsuarioDto adicionar(@RequestBody @Valid UsuarioComSenhaDtoInput usuarioAdmDtoInput) {
 		Usuario usuario = disassembler.toDomainObject(usuarioAdmDtoInput);
 		usuario = service.salvar(usuario);
@@ -66,7 +67,7 @@ public class UsuarioAdmController {
 		 
 	}
 	
-	@PutMapping("/{usuarioId}")
+	@PutMapping(value= "/{usuarioId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UsuarioDto alterar(@PathVariable Long usuarioId,
 		@RequestBody @Valid UsuarioDtoInput usuarioInput) {
 		

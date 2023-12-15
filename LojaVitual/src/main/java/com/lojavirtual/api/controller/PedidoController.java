@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,7 +54,7 @@ public class PedidoController {
 	private PedidoDtoResumoAssembler assemblerResumo;
 	
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<PedidoDtoResumo> pesquisar(PedidoFilter pedidoFilter, @PageableDefault(size=10) Pageable pageable){
 		
 		pageable = traduzirPageable(pageable);
@@ -69,7 +70,7 @@ public class PedidoController {
 	}
 	
 	
-	@GetMapping("/{codigoPedido}")
+	@GetMapping(value = "/{codigoPedido}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public PedidoDtoResumo buscar(@PathVariable String codigoPedido) {
 		
 		Pedido pedido = service.buscarOuFalhar(codigoPedido);
@@ -77,7 +78,7 @@ public class PedidoController {
 		
 	}
 	
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoDtoResumo adicionar(@RequestBody @Valid PedidoDtoInput pedidoInput) {
 		

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,7 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoInputDisassembler disassembler;
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<ProdutoDto> listar(@RequestParam(required = false) boolean inativos, Pageable pageable){
 		
 		Page<Produto> produtosPage = null;
@@ -63,14 +64,14 @@ public class ProdutoController {
 	}
 
 	
-	@GetMapping("/{produtoId}")
+	@GetMapping(value = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ProdutoDto buscar(@PathVariable Long produtoId) {
 		Produto protuto = service.buscarOuFalhar(produtoId);
 		return assembler.toDto(protuto);
 	}
 	
 	
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoDto adicionar(@RequestBody @Valid ProdutoDtoInput produtoInput) {
 	
@@ -80,7 +81,7 @@ public class ProdutoController {
 		return assembler.toDto(produto);
 	}
 	
-	@PutMapping("/{produtoId}")
+	@PutMapping(value = "/{produtoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ProdutoDto alterar(@PathVariable Long produtoId 
 			,@RequestBody @Valid ProdutoDtoInput produtoInput) {
 		

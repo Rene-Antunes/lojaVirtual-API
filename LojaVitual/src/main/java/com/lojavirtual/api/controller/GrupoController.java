@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,19 +43,19 @@ public class GrupoController {
 	private CadastroGrupoService service;
 	
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GrupoDto> listar(){
 		List<Grupo> grupos = repository.findAll();
 		return assembler.toDtoCollection(grupos);	
 	}
 	
-	@GetMapping("/{grupoId}")
+	@GetMapping(value = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GrupoDto buscar(@PathVariable Long grupoId) {
 		Grupo grupo = service.buscarOuFalhar(grupoId);
 		return assembler.toDto(grupo);
 	}
 	
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public GrupoDto adicionar(@RequestBody @Valid GrupoDtoInput grupoDtoInput) {
 		Grupo grupo = disassembler.toDomainObject(grupoDtoInput);
@@ -62,7 +63,7 @@ public class GrupoController {
 		return assembler.toDto(grupo);
 	}
 	
-	@PutMapping("/{grupoId}")
+	@PutMapping(value = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GrupoDto alterar(@PathVariable Long grupoId, @RequestBody @Valid GrupoDtoInput grupoDtoInput) {
 		Grupo novoGrupo = service.buscarOuFalhar(grupoId);
 		disassembler.copyToDomainObject(grupoDtoInput, novoGrupo);
