@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.lojavirtual.domain.event.PedidoCanceladoEvent;
 import com.lojavirtual.domain.event.PedidoConfirmadoEvent;
 import com.lojavirtual.domain.exception.NegocioException;
 
@@ -106,6 +107,8 @@ public class Pedido extends AbstractAggregateRoot<Pedido>{
 	public void cancelar() {
 		setStatus(StatusPedido.CANCELADO);
 		setDataCancelamento(LocalDateTime.now());
+		
+		registerEvent(new PedidoCanceladoEvent(this));
 	}
 	
 	private void setStatus(StatusPedido novoStatus) {

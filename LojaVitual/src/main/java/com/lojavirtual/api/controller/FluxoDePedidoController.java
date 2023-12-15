@@ -46,6 +46,8 @@ public class FluxoDePedidoController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void cancelar(@PathVariable String codigoPedido) {
 		pedidoService.cancelar(codigoPedido);
+		
+		
 	}
 
 }
