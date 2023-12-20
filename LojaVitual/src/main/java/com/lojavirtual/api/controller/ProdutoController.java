@@ -23,9 +23,11 @@ import com.lojavirtual.api.assembler.ProdutoDtoAssembler;
 import com.lojavirtual.api.assembler.disassembler.ProdutoInputDisassembler;
 import com.lojavirtual.api.modelDto.ProdutoDto;
 import com.lojavirtual.api.modelDto.input.ProdutoDtoInput;
+import com.lojavirtual.domain.filter.ProdutoFilter;
 import com.lojavirtual.domain.model.Produto;
 import com.lojavirtual.domain.repository.ProdutoRepository;
 import com.lojavirtual.domain.service.CadastroProdutoService;
+import com.lojavirtual.infraInstructure.spec.ProdutoSpec;
 
 import jakarta.validation.Valid;
 
@@ -46,16 +48,10 @@ public class ProdutoController {
 	private ProdutoInputDisassembler disassembler;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<ProdutoDto> listar(@RequestParam(required = false) boolean inativos, Pageable pageable){
+	public Page<ProdutoDto> listar(ProdutoFilter produtoFilter, Pageable pageable){
 		
-		Page<Produto> produtosPage = null;
-		
-		if(inativos) {
-			produtosPage = repository.findAll(pageable);
-		}else {
-		
-			produtosPage = repository.findAtivosProdutos(pageable);
-		}
+		Page<Produto> produtosPage = repository.findAll(ProdutoSpec.produtoFilter(produtoFilter), pageable);
+
 		List<ProdutoDto> produtoDtos = assembler.toDtoCollection(produtosPage.getContent());
 		
 		Page<ProdutoDto> produtoDtoPage = new PageImpl<>(produtoDtos, pageable,produtosPage.getTotalElements());
