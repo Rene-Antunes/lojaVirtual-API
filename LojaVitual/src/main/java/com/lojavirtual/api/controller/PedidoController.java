@@ -59,7 +59,7 @@ public class PedidoController {
 		
 		pageable = traduzirPageable(pageable);
 		
-		Page<Pedido> pedidosPage = repository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
+		Page<Pedido> pedidosPage = repository.findAll(PedidoSpecs.pedidoFiltro(pedidoFilter), pageable);
 		
 		List<PedidoDtoResumo> pedidoDtos = assemblerResumo.toCollectionDto(pedidosPage.getContent());
 		
