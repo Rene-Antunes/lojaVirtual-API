@@ -11,7 +11,7 @@ import jakarta.persistence.criteria.Predicate;
 
 public class PedidoSpecs {
 	
-	public static Specification<Pedido> usandoFiltro(PedidoFilter filtro){
+	public static Specification<Pedido> pedidoFiltro(PedidoFilter filtro){
 		return (root, query, builder) -> {
 			
 			if(Pedido.class.equals(query.getResultType())) {
