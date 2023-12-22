@@ -1,13 +1,16 @@
 package com.lojavirtual.api.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,7 +51,7 @@ public class ProdutoController {
 	private ProdutoInputDisassembler disassembler;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<ProdutoDto> listar(ProdutoFilter produtoFilter, Pageable pageable){
+	public ResponseEntity<Page<ProdutoDto>> listar(ProdutoFilter produtoFilter, Pageable pageable){
 		
 		Page<Produto> produtosPage = repository.findAll(ProdutoSpec.produtoFilter(produtoFilter), pageable);
 
@@ -56,7 +59,9 @@ public class ProdutoController {
 		
 		Page<ProdutoDto> produtoDtoPage = new PageImpl<>(produtoDtos, pageable,produtosPage.getTotalElements());
 		
-		return produtoDtoPage;
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES))
+				.body(produtoDtoPage);
 	}
 
 	
